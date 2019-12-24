@@ -11,12 +11,19 @@ namespace ETEditor
 		public static string BuildFolder = "../Release/{0}/StreamingAssets/";
 		
 		
-		[MenuItem("Tools/web资源服务器")]
+		[MenuItem("Tools/启动web资源服务器")]
 		public static void OpenFileServer()
 		{
 			ProcessHelper.Run("dotnet", "FileServer.dll", "../FileServer/");
 		}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="buildAssetBundleOptions"></param>
+        /// <param name="buildOptions">打包配置</param>
+        /// <param name="isBuildExe">是否打包EXE</param>
+        /// <param name="isContainAB">是否包涵AB包</param>
 		public static void Build(PlatformType type, BuildAssetBundleOptions buildAssetBundleOptions, BuildOptions buildOptions, bool isBuildExe, bool isContainAB)
 		{
 			BuildTarget buildTarget = BuildTarget.StandaloneWindows;
@@ -44,17 +51,18 @@ namespace ETEditor
 			{
 				Directory.CreateDirectory(fold);
 			}
-			
-			Log.Info("开始资源打包");
-			BuildPipeline.BuildAssetBundles(fold, buildAssetBundleOptions, buildTarget);
-			
-			GenerateVersionInfo(fold);
-			Log.Info("完成资源打包");
 
+			
+			Log.Debug("开始资源打包:"+ fold);
+			BuildPipeline.BuildAssetBundles(fold, buildAssetBundleOptions, buildTarget);
+			//创建版本文件信息
+			GenerateVersionInfo(fold);
 			if (isContainAB)
 			{
-				FileHelper.CleanDirectory("Assets/StreamingAssets/");
-				FileHelper.CopyDirectory(fold, "Assets/StreamingAssets/");
+                Log.Debug("清空SA");
+                FileHelper.CleanDirectory("Assets/StreamingAssets/");
+                Log.Debug("将资源拷贝到SA");
+                FileHelper.CopyDirectory(fold, "Assets/StreamingAssets/");
 			}
 
 			if (isBuildExe)
@@ -63,23 +71,26 @@ namespace ETEditor
 				string[] levels = {
 					"Assets/Scenes/Init.unity",
 				};
-				Log.Info("开始EXE打包");
 				BuildPipeline.BuildPlayer(levels, $"{relativeDirPrefix}/{exeName}", buildTarget, buildOptions);
-				Log.Info("完成exe打包");
+				Log.Debug("完成exe打包");
 			}
 		}
-
+        /// <summary>
+        /// 创建版本信息
+        /// </summary>
+        /// <param name="dir"></param>
 		private static void GenerateVersionInfo(string dir)
-		{
-			VersionConfig versionProto = new VersionConfig();
-			GenerateVersionProto(dir, versionProto, "");
+        {
+            VersionConfig versionProto = new VersionConfig();
+            Log.Debug(JsonHelper.ToJson(versionProto));
 
-			using (FileStream fileStream = new FileStream($"{dir}/Version.txt", FileMode.Create))
-			{
-				byte[] bytes = JsonHelper.ToJson(versionProto).ToByteArray();
-				fileStream.Write(bytes, 0, bytes.Length);
-			}
-		}
+            GenerateVersionProto(dir, versionProto, "");
+            using (FileStream fileStream = new FileStream($"{dir}/Version.txt", FileMode.Create))
+            {
+                byte[] bytes = JsonHelper.ToJson(versionProto).ToByteArray();
+                fileStream.Write(bytes, 0, bytes.Length);
+            }
+        }
 
 		private static void GenerateVersionProto(string dir, VersionConfig versionProto, string relativePath)
 		{

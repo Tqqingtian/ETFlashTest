@@ -22,6 +22,7 @@ namespace ETEditor
             File.Copy(Path.Combine(ScriptAssembliesDir, HotfixPdb), Path.Combine(CodeDir, "Hotfix.pdb.bytes"), true);
             UnityEngine.Debug.Log(Path.Combine(ScriptAssembliesDir, HotfixDll) +"拷贝到=》"+ Path.Combine(CodeDir, "Hotfix.dll.bytes"));
             Log.Info($"复制Hotfix.dll, Hotfix.pdb到Res/Code完成");
+
             AssetDatabase.Refresh();
         }
     }

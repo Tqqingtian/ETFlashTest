@@ -8,11 +8,15 @@ using Object = UnityEngine.Object;
 
 namespace ETEditor
 {
+
+
 	public class BundleInfo
 	{
 		public List<string> ParentPaths = new List<string>();
 	}
-
+    /// <summary>
+    /// 平台
+    /// </summary>
 	public enum PlatformType
 	{
 		None,
@@ -24,9 +28,9 @@ namespace ETEditor
 	
 	public enum BuildType
 	{
-		Development,
 		Release,
-	}
+        Development,
+    }
 
 	public class BuildEditor : EditorWindow
 	{
@@ -38,8 +42,8 @@ namespace ETEditor
 		private BuildType buildType;
 		private BuildOptions buildOptions = BuildOptions.AllowDebugging | BuildOptions.Development;
 		private BuildAssetBundleOptions buildAssetBundleOptions = BuildAssetBundleOptions.None;
-
-		[MenuItem("Tools/打包工具")]
+        
+		[MenuItem("Tools/BuildTool")]
 		public static void ShowWindow()
 		{
 			GetWindow(typeof(BuildEditor));
@@ -47,9 +51,9 @@ namespace ETEditor
 
 		private void OnGUI() 
 		{
-			this.platformType = (PlatformType)EditorGUILayout.EnumPopup(platformType);
-			this.isBuildExe = EditorGUILayout.Toggle("是否打包EXE: ", this.isBuildExe);
-			this.isContainAB = EditorGUILayout.Toggle("是否同将资源打进EXE: ", this.isContainAB);
+            this.platformType = (PlatformType)EditorGUILayout.EnumPopup(platformType);
+            this.isBuildExe = EditorGUILayout.Toggle("IsBuildEXE(Abandon): ", this.isBuildExe);
+			this.isContainAB = EditorGUILayout.Toggle("IsBuilABInEXE: ", this.isContainAB);
 			this.buildType = (BuildType)EditorGUILayout.EnumPopup("BuildType: ", this.buildType);
 			
 			switch (buildType)
@@ -64,7 +68,7 @@ namespace ETEditor
 			
 			this.buildAssetBundleOptions = (BuildAssetBundleOptions)EditorGUILayout.EnumFlagsField("BuildAssetBundleOptions(可多选): ", this.buildAssetBundleOptions);
 
-			if (GUILayout.Button("开始打包"))
+			if (GUILayout.Button("StartBuil"))
 			{
 				if (this.platformType == PlatformType.None)
 				{
@@ -75,7 +79,9 @@ namespace ETEditor
 			}
 		}
 
-		private void SetPackingTagAndAssetBundle()
+        #region 设置assetbundle
+
+        private void SetPackingTagAndAssetBundle()
 		{
 			ClearPackingTagAndAssetBundle();
 
@@ -135,8 +141,11 @@ namespace ETEditor
 			}
 		}
 
-		// 会将目录下的每个prefab引用的资源强制打成一个包，不分析共享资源
-		private static void SetIndependentBundleAndAtlas(string dir)
+        /// <summary>
+        /// 会将目录下的每个prefab引用的资源强制打成一个包，不分析共享资源
+        /// </summary>
+        /// <param name="dir"></param>
+        private static void SetIndependentBundleAndAtlas(string dir)
 		{
 			List<string> paths = EditorResHelper.GetPrefabsAndScenes(dir);
 			foreach (string path in paths)
@@ -389,5 +398,8 @@ namespace ETEditor
 				AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport | ImportAssetOptions.ForceUpdate);
 			}
 		}
-	}
+
+
+        #endregion
+    }
 }

@@ -19,7 +19,6 @@
 #else
 			url += "PC/";
 #endif
-			Log.Debug(url);
 			return url;
 		}
 	}

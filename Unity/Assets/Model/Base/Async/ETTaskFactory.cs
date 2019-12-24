@@ -5,8 +5,11 @@ namespace ETModel
 {
     public partial struct ETTask
     {
-        public static ETTask CompletedTask => new ETTask();
-
+        /// <summary>
+        /// 等待任务
+        /// </summary>
+        public static ETTask CompletedTask => new ETTask(); //public static ETTask CompletedTask { get { return new ETTask(); } }
+        
         public static ETTask FromException(Exception ex)
         {
             ETTaskCompletionSource tcs = new ETTaskCompletionSource();

@@ -20,20 +20,33 @@ namespace ETModel
 				GetAllFiles(files, subDir);
 			}
 		}
-		
+		/// <summary>
+        /// 清理目标文件夹
+        /// </summary>
+        /// <param name="dir"></param>
 		public static void CleanDirectory(string dir)
 		{
-			foreach (string subdir in Directory.GetDirectories(dir))
-			{
-				Directory.Delete(subdir, true);		
-			}
-
-			foreach (string subFile in Directory.GetFiles(dir))
-			{
-				File.Delete(subFile);
-			}
+            if (Directory.Exists(dir))
+            {
+                foreach (string subdir in Directory.GetDirectories(dir))
+                {
+                    Directory.Delete(subdir, true);
+                }
+                foreach (string subFile in Directory.GetFiles(dir))
+                {
+                    File.Delete(subFile);
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(dir);
+            }
 		}
-
+        /// <summary>
+        /// 拷贝文件
+        /// </summary>
+        /// <param name="srcDir"></param>
+        /// <param name="tgtDir"></param>
 		public static void CopyDirectory(string srcDir, string tgtDir)
 		{
 			DirectoryInfo source = new DirectoryInfo(srcDir);

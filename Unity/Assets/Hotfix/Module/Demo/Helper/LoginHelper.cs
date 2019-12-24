@@ -3,8 +3,16 @@ using ETModel;
 
 namespace ETHotfix
 {
+    /// <summary>
+    /// 登录助手
+    /// </summary>
     public static class LoginHelper
     {
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="account">账号</param>
+        /// <returns></returns>
         public static async ETVoid OnLoginAsync(string account)
         {
             try

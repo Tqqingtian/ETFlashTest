@@ -2,7 +2,7 @@
 
 namespace ETHotfix
 {
-	// 分发数值监听
+	//分发数值监听
 	[Event(ETModel.EventIdType.TestHotfixSubscribMonoEvent)]
 	public class TestHotfixSubscribMonoEvent_LogString : AEvent<string>
 	{

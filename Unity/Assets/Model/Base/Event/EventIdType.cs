@@ -2,6 +2,9 @@
 {
 	public static class EventIdType
 	{
+        /// <summary>
+        /// 注册热消息
+        /// </summary>
 		public const string RecvHotfixMessage = "RecvHotfixMessage";
 		public const string BehaviorTreeRunTreeEvent = "BehaviorTreeRunTreeEvent";
 		public const string BehaviorTreeOpenEditor = "BehaviorTreeOpenEditor";

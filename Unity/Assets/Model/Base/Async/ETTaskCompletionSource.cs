@@ -4,6 +4,9 @@ using System.Runtime.ExceptionServices;
 
 namespace ETModel
 {
+    /// <summary>
+    /// 任务完成源
+    /// </summary>
     public class ETTaskCompletionSource: IAwaiter
     {
         // State(= AwaiterStatus)

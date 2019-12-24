@@ -18,10 +18,16 @@ namespace ETModel
 	/// </summary>
 	public class UIComponent: Component
 	{
+        /// <summary>
+        /// ui眼镜
+        /// </summary>
 		public GameObject Camera;
 		
 		public Dictionary<string, UI> uis = new Dictionary<string, UI>();
-
+        /// <summary>
+        /// UI添加
+        /// </summary>
+        /// <param name="ui"></param>
 		public void Add(UI ui)
 		{
 			ui.GameObject.GetComponent<Canvas>().worldCamera = this.Camera.GetComponent<Camera>();
@@ -29,7 +35,10 @@ namespace ETModel
 			this.uis.Add(ui.Name, ui);
 			ui.Parent = this;
 		}
-
+        /// <summary>
+        /// UI移除
+        /// </summary>
+        /// <param name="name"></param>
 		public void Remove(string name)
 		{
 			if (!this.uis.TryGetValue(name, out UI ui))
@@ -39,7 +48,11 @@ namespace ETModel
 			this.uis.Remove(name);
 			ui.Dispose();
 		}
-
+        /// <summary>
+        /// UI获取
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
 		public UI Get(string name)
 		{
 			UI ui = null;

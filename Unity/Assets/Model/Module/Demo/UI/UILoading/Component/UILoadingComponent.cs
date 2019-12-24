@@ -8,7 +8,8 @@ namespace ETModel
 	{
 		public override void Awake(UILoadingComponent self)
 		{
-			self.text = self.GetParent<UI>().GameObject.Get<GameObject>("Text").GetComponent<Text>();
+            Log.Debug("[UiLoadingComponentStartSystem.Awake()]");
+            self.text = self.GetParent<UI>().GameObject.Get<GameObject>("Text").GetComponent<Text>();
 		}
 	}
 
@@ -17,18 +18,25 @@ namespace ETModel
 	{
 		public override void Start(UILoadingComponent self)
 		{
-			StartAsync(self).Coroutine();
+            Log.Debug("[UiLoadingComponentStartSystem.Start()]");
+            StartAsync(self).Coroutine();
 		}
-		
+		/// <summary>
+        /// 开始等待
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
 		public async ETVoid StartAsync(UILoadingComponent self)
 		{
+            Log.Debug("开始更新的UI显示");
 			TimerComponent timerComponent = Game.Scene.GetComponent<TimerComponent>();
 			long instanceId = self.InstanceId;
+            
 			while (true)
 			{
 				await timerComponent.WaitAsync(1000);
-
-				if (self.InstanceId != instanceId)
+                Log.Debug("当前Id：" + instanceId.ToString()+"本生Id："+self.InstanceId);
+                if (self.InstanceId != instanceId)
 				{
 					return;
 				}
@@ -38,6 +46,7 @@ namespace ETModel
 				{
 					continue;
 				}
+                Log.Debug("包的大小："+ bundleDownloaderComponent.TotalSize +"包的比例："+ bundleDownloaderComponent.Progress.ToString());
 				self.text.text = $"{bundleDownloaderComponent.Progress}%";
 			}
 		}

@@ -2,6 +2,9 @@
 
 namespace ETModel
 {
+    /// <summary>
+    /// 组件工厂
+    /// </summary>
 	public static class ComponentFactory
 	{
 		public static Component CreateWithParent(Type type, Component parent, bool fromPool = true)
@@ -243,7 +246,15 @@ namespace ETModel
 			Game.EventSystem.Awake(component);
 			return component;
 		}
-
+        /// <summary>
+        /// 创建一个Id
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="a"></param>
+        /// <param name="fromPool"></param>
+        /// <returns></returns>
 		public static T CreateWithId<T, A>(long id, A a, bool fromPool = true) where T : ComponentWithId
 		{
 			Type type = typeof (T);

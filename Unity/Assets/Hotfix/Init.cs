@@ -21,7 +21,8 @@ namespace ETHotfix
 			
 			try
 			{
-				// 注册热更层回调（入口就是在这里）
+
+				//注册热更层回调（入口就是在这里）
 				ETModel.Game.Hotfix.Update = () => { Update(); };
 				ETModel.Game.Hotfix.LateUpdate = () => { LateUpdate(); };
 				ETModel.Game.Hotfix.OnApplicationQuit = () => { OnApplicationQuit(); };
@@ -37,7 +38,7 @@ namespace ETHotfix
                 UnitConfig unitConfig = (UnitConfig)Game.Scene.GetComponent<ConfigComponent>().Get(typeof(UnitConfig), 1001);
 				Log.Debug($"config {JsonHelper.ToJson(unitConfig)}");
 
-				Game.EventSystem.Run(EventIdType.InitSceneStart);
+				Game.EventSystem.Run(EventIdType.InitGameStart);
 			}
 			catch (Exception e)
 			{

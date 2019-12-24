@@ -4,6 +4,14 @@ namespace ETHotfix
 {
 	public static class Log
 	{
+        public static void NewLog(string msg)
+        {
+#if !SEVER
+            UnityEngine.Debug.Log(msg);
+#endif
+        }
+
+
 		public static void Trace(string msg)
 		{
 			ETModel.Log.Trace(msg);

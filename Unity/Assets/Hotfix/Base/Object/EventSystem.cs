@@ -46,7 +46,7 @@ namespace ETHotfix
 		public EventSystem()
 		{
 			this.types.Clear();
-			
+			//获取热更的类型
 			List<Type> ts = ETModel.Game.Hotfix.GetHotfixTypes();
 			
 			foreach (Type type in ts)
@@ -103,7 +103,8 @@ namespace ETHotfix
 			this.allEvents.Clear();
 			foreach (Type type in types)
 			{
-				object[] attrs = type.GetCustomAttributes(typeof(EventAttribute), false);
+                //获取 所有 挂EventAttribute特性的脚本
+                object[] attrs = type.GetCustomAttributes(typeof(EventAttribute), false);
 
 				foreach (object attr in attrs)
 				{
@@ -116,7 +117,7 @@ namespace ETHotfix
 					}
 					this.RegisterEvent(aEventAttribute.Type, iEvent);
 
-					// hotfix的事件也要注册到mono层，hotfix可以订阅mono层的事件
+					//hotfix的事件也要注册到mono层，hotfix可以订阅mono层的事件
 					Action<List<object>> action = list => { Handle(iEvent, list); };
 					ETModel.Game.EventSystem.RegisterEvent(aEventAttribute.Type, new EventProxy(action));
 				}
@@ -417,7 +418,9 @@ namespace ETHotfix
 
 			ObjectHelper.Swap(ref this.loaders, ref this.loaders2);
 		}
-
+        /// <summary>
+        /// 开始
+        /// </summary>
 		private void Start()
 		{
 			while (this.starts.Count > 0)
@@ -474,7 +477,9 @@ namespace ETHotfix
 				}
 			}
 		}
-
+        /// <summary>
+        /// 更新
+        /// </summary>
 		public void Update()
 		{
 			this.Start();
@@ -556,7 +561,10 @@ namespace ETHotfix
 
 			ObjectHelper.Swap(ref this.lateUpdates, ref this.lateUpdates2);
 		}
-
+        /// <summary>
+        /// 事件脚本
+        /// </summary>
+        /// <param name="type">事件字符串</param>
 		public void Run(string type)
 		{
 			List<IEvent> iEvents;

@@ -212,7 +212,7 @@ namespace ETModel
 			UnityEngine.Object resource = null;
 			if (!dict.TryGetValue(prefab, out resource))
 			{
-				throw new Exception($"not found asset: {bundleName} {prefab}");
+				throw new Exception($"not found prefab: {bundleName} {prefab}");
 			}
 
 			return resource;
@@ -258,7 +258,7 @@ namespace ETModel
 		}
 
 		/// <summary>
-		/// 同步加载assetbundle
+		/// 同步加载assetbundle，没有就去加载
 		/// </summary>
 		/// <param name="assetBundleName"></param>
 		/// <returns></returns>
@@ -266,8 +266,8 @@ namespace ETModel
 		{
 			assetBundleName = assetBundleName.ToLower();
 			string[] dependencies = AssetBundleHelper.GetSortedDependencies(assetBundleName);
-			//Log.Debug($"-----------dep load {assetBundleName} dep: {dependencies.ToList().ListToString()}");
-			foreach (string dependency in dependencies)
+            //Log.Debug($"资源加载  dep load {assetBundleName} dep: {dependencies.ToList().ListToString()}");
+            foreach (string dependency in dependencies)
 			{
 				if (string.IsNullOrEmpty(dependency))
 				{
@@ -284,7 +284,7 @@ namespace ETModel
         /// <param name="resource">资源</param>
 		public void AddResource(string bundleName, string assetName, UnityEngine.Object resource)
 		{
-            //Debug.Log("     assetBundleName:" + bundleName + "      asset.name:" + assetName + "    asset:" + resource);
+            //Log.Debug("assetBundleName:" + bundleName + "      asset.name:" + assetName + "    asset:" + resource);
             Dictionary<string, UnityEngine.Object> dict;
 			if (!this.resourceCache.TryGetValue(bundleName.BundleNameToLower(), out dict))
 			{
@@ -294,7 +294,10 @@ namespace ETModel
 
 			dict[assetName] = resource;
 		}
-
+        /// <summary>
+        /// 加载一个bundle
+        /// </summary>
+        /// <param name="assetBundleName"></param>
 		public void LoadOneBundle(string assetBundleName)
 		{
 			//Log.Debug($"---------------load one bundle {assetBundleName}");

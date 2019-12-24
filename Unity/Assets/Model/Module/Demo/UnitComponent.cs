@@ -12,6 +12,9 @@ namespace ETModel
 		}
 	}
 	
+    /// <summary>
+    /// 实体
+    /// </summary>
 	public class UnitComponent: Component
 	{
 		public static UnitComponent Instance { get; private set; }
@@ -48,7 +51,11 @@ namespace ETModel
 			this.idUnits.Add(unit.Id, unit);
 			unit.Parent = this;
 		}
-
+        /// <summary>
+        /// 获取实体
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 		public Unit Get(long id)
 		{
 			Unit unit;

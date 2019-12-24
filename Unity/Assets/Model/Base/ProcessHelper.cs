@@ -7,6 +7,14 @@ namespace ETModel
 {
     public static class ProcessHelper
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exe"></param>
+        /// <param name="arguments"></param>
+        /// <param name="workingDirectory">是否等待退出</param>
+        /// <param name="waitExit"></param>
+        /// <returns></returns>
         public static Process Run(string exe, string arguments, string workingDirectory = ".", bool waitExit = false)
         {
             try
@@ -38,7 +46,8 @@ namespace ETModel
                     RedirectStandardOutput = redirectStandardOutput,
                     RedirectStandardError = redirectStandardError,
                 };
-                
+
+                Log.Debug("Web运行的路径："+ workingDirectory);
                 Process process = Process.Start(info);
 
                 if (waitExit)

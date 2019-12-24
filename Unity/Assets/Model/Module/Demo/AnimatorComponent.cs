@@ -21,7 +21,9 @@ namespace ETModel
 			self.Update();
 		}
 	}
-
+    /// <summary>
+    /// 动作组件
+    /// </summary>
 	public class AnimatorComponent : Component
 	{
 		public Dictionary<string, AnimationClip> animationClips = new Dictionary<string, AnimationClip>();
@@ -173,7 +175,11 @@ namespace ETModel
 
 			this.Animator.SetBool(name, state);
 		}
-
+        /// <summary>
+        /// 设置动作浮点数
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="state"></param>
 		public void SetFloatValue(string name, float state)
 		{
 			if (!this.HasParameter(name))

@@ -13,7 +13,7 @@ namespace ETModel
 				GameObject go = UnityEngine.Object.Instantiate(bundleGameObject);
 				go.layer = LayerMask.NameToLayer(LayerNames.UI);
 				UI ui = ComponentFactory.Create<UI, string, GameObject>(UIType.UILoading, go, false);
-
+                Log.Debug("添加加载组件");
 				ui.AddComponent<UILoadingComponent>();
 				return ui;
 	        }

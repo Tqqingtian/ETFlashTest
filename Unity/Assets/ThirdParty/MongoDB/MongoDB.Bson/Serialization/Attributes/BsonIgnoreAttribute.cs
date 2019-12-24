@@ -18,7 +18,7 @@ using System;
 namespace MongoDB.Bson.Serialization.Attributes
 {
     /// <summary>
-    /// Indicates that this field or property should be ignored when this class is serialized.
+    /// 指示在序列化该类时应忽略此字段或属性。
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class BsonIgnoreAttribute : Attribute

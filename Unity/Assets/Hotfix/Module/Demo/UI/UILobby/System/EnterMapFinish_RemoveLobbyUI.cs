@@ -10,6 +10,7 @@ namespace ETHotfix
 	{
 		public override void Run()
 		{
+            Log.Info("移除大厅UI");
             //移除UI
 			Game.Scene.GetComponent<UIComponent>().Remove(UIType.UILobby);
             //卸载UI资源

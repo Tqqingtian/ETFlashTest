@@ -3,102 +3,102 @@ using UnityEngine.Networking;
 
 namespace ETModel
 {
-	[ObjectSystem]
-	public class UnityWebRequestUpdateSystem : UpdateSystem<UnityWebRequestAsync>
-	{
-		public override void Update(UnityWebRequestAsync self)
-		{
-			self.Update();
-		}
-	}
-	
-	public class UnityWebRequestAsync : Component
-	{
-		public class AcceptAllCertificate: CertificateHandler
-		{
-			protected override bool ValidateCertificate(byte[] certificateData)
-			{
-				return true;
-			}
-		}
-		
-		public static AcceptAllCertificate certificateHandler = new AcceptAllCertificate();
-		
-		public UnityWebRequest Request;
+    [ObjectSystem]
+    public class UnityWebRequestUpdateSystem : UpdateSystem<UnityWebRequestAsync>
+    {
+        public override void Update(UnityWebRequestAsync self)
+        {
+            self.Update();
+        }
+    }
 
-		public bool isCancel;
+    public class UnityWebRequestAsync : Component
+    {
+        public class AcceptAllCertificate : CertificateHandler
+        {
+            protected override bool ValidateCertificate(byte[] certificateData)
+            {
+                return true;
+            }
+        }
 
-		public ETTaskCompletionSource tcs;
-		
-		public override void Dispose()
-		{
-			if (this.IsDisposed)
-			{
-				return;
-			}
+        public static AcceptAllCertificate certificateHandler = new AcceptAllCertificate();
 
-			base.Dispose();
+        public UnityWebRequest Request;
 
-			this.Request?.Dispose();
-			this.Request = null;
-			this.isCancel = false;
-		}
+        public bool isCancel;
 
-		public float Progress
-		{
-			get
-			{
-				if (this.Request == null)
-				{
-					return 0;
-				}
-				return this.Request.downloadProgress;
-			}
-		}
+        public ETTaskCompletionSource tcs;
 
-		public ulong ByteDownloaded
-		{
-			get
-			{
-				if (this.Request == null)
-				{
-					return 0;
-				}
-				return this.Request.downloadedBytes;
-			}
-		}
+        public override void Dispose()
+        {
+            if (this.IsDisposed)
+            {
+                return;
+            }
 
-		public void Update()
-		{
-			if (this.isCancel)
-			{
-				this.tcs.SetException(new Exception($"request error: {this.Request.error}"));
-				return;
-			}
-			
-			if (!this.Request.isDone)
-			{
-				return;
-			}
-			if (!string.IsNullOrEmpty(this.Request.error))
-			{
-				this.tcs.SetException(new Exception($"request error: {this.Request.error}"));
-				return;
-			}
+            base.Dispose();
 
-			this.tcs.SetResult();
-		}
+            this.Request?.Dispose();
+            this.Request = null;
+            this.isCancel = false;
+        }
 
-		public ETTask DownloadAsync(string url)
-		{
-			this.tcs = new ETTaskCompletionSource();
-			
-			url = url.Replace(" ", "%20");
-			this.Request = UnityWebRequest.Get(url);
-			this.Request.certificateHandler = certificateHandler;
-			this.Request.SendWebRequest();
-			
-			return this.tcs.Task;
-		}
-	}
+        public float Progress
+        {
+            get
+            {
+                if (this.Request == null)
+                {
+                    return 0;
+                }
+                return this.Request.downloadProgress;
+            }
+        }
+
+        public ulong ByteDownloaded
+        {
+            get
+            {
+                if (this.Request == null)
+                {
+                    return 0;
+                }
+                return this.Request.downloadedBytes;
+            }
+        }
+
+        public void Update()
+        {
+            if (this.isCancel)
+            {
+                this.tcs.SetException(new Exception($"request error: {this.Request.error}"));
+                return;
+            }
+
+            if (!this.Request.isDone)
+            {
+                return;
+            }
+            if (!string.IsNullOrEmpty(this.Request.error))
+            {
+                this.tcs.SetException(new Exception($"request error: {this.Request.error}"));
+                return;
+            }
+
+            this.tcs.SetResult();
+        }
+
+        public ETTask DownloadAsync(string url)
+        {
+            this.tcs = new ETTaskCompletionSource();
+            Log.Debug("无处理下载到的：" + url);
+            url = url.Replace(" ", "%20");
+            Log.Debug("最终下载到的：" + url);
+            this.Request = UnityWebRequest.Get(url);
+            this.Request.certificateHandler = certificateHandler;
+            this.Request.SendWebRequest();
+            return this.tcs.Task;
+        }
+    }
 }

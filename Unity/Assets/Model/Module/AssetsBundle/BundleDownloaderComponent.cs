@@ -56,21 +56,24 @@ namespace ETModel
 
 				this.Entity.RemoveComponent<BundleDownloaderComponent>();
 		}
-
+        /// <summary>
+        /// 开始异步对比
+        /// </summary>
+        /// <returns></returns>
 		public async ETTask StartAsync()
 		{
-			// 获取远程的Version.txt
+			//获取远程的Version.txt
 			string versionUrl = "";
 			try
 			{
 				using (UnityWebRequestAsync webRequestAsync = ComponentFactory.Create<UnityWebRequestAsync>())
 				{
-					versionUrl = GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/" + "Version.txt";
-					//Log.Debug(versionUrl);
-					await webRequestAsync.DownloadAsync(versionUrl);
+					versionUrl = GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/Version.txt";
+                    Log.Debug("下载版本文件："+versionUrl);
+                    await webRequestAsync.DownloadAsync(versionUrl);
 					remoteVersionConfig = JsonHelper.FromJson<VersionConfig>(webRequestAsync.Request.downloadHandler.text);
-					//Log.Debug(JsonHelper.ToJson(this.VersionConfig));
-				}
+                    Log.Debug("当前游戏版本号(未对比版本号)："+this.remoteVersionConfig.Version.ToString());
+                }
 
 			}
 			catch (Exception e)
@@ -81,13 +84,14 @@ namespace ETModel
 			// 获取streaming目录的Version.txt
 			VersionConfig streamingVersionConfig;
 			string versionPath = Path.Combine(PathHelper.AppResPath4Web, "Version.txt");
+            Log.Debug("本地版本文件："+versionPath);
 			using (UnityWebRequestAsync request = ComponentFactory.Create<UnityWebRequestAsync>())
 			{
 				await request.DownloadAsync(versionPath);
 				streamingVersionConfig = JsonHelper.FromJson<VersionConfig>(request.Request.downloadHandler.text);
 			}
 			
-			// 删掉远程不存在的文件
+			//删掉远程不存在的文件
 			DirectoryInfo directoryInfo = new DirectoryInfo(PathHelper.AppHotfixResPath);
 			if (directoryInfo.Exists)
 			{
@@ -112,17 +116,22 @@ namespace ETModel
 				directoryInfo.Create();
 			}
 
-			// 对比MD5
+			//对比MD5
 			foreach (FileVersionInfo fileVersionInfo in remoteVersionConfig.FileInfoDict.Values)
 			{
-				// 对比md5
+                Log.Debug("对比的包："+fileVersionInfo.File);
+				//对比md5
+
 				string localFileMD5 = BundleHelper.GetBundleMD5(streamingVersionConfig, fileVersionInfo.File);
-				if (fileVersionInfo.MD5 == localFileMD5)
+                Log.Debug(fileVersionInfo.MD5+"MD5对比：" + localFileMD5);
+                if (fileVersionInfo.MD5 == localFileMD5)
 				{
 					continue;
 				}
-				this.bundles.Enqueue(fileVersionInfo.File);
-				this.TotalSize += fileVersionInfo.Size;
+                //本地
+                this.bundles.Enqueue(fileVersionInfo.File);
+                
+                this.TotalSize += fileVersionInfo.Size;
 			}
 		}
 
@@ -132,7 +141,8 @@ namespace ETModel
 			{
 				if (this.TotalSize == 0)
 				{
-					return 0;
+                    Log.Debug("无需下载资源");
+					return 100;
 				}
 
 				long alreadyDownloadBytes = 0;
@@ -145,12 +155,17 @@ namespace ETModel
 				{
 					alreadyDownloadBytes += (long)this.webRequest.Request.downloadedBytes;
 				}
-				return (int)(alreadyDownloadBytes * 100f / this.TotalSize);
+                Log.Debug("我要下载的大小：" + this.TotalSize);
+                return (int)(alreadyDownloadBytes * 100f / this.TotalSize);
 			}
 		}
-
+        /// <summary>
+        /// 开始下载
+        /// </summary>
+        /// <returns></returns>
 		public async ETTask DownloadAsync()
 		{
+            Log.Debug("ab包数量：" + this.bundles.Count+"下载名称："+ downloadingBundle);
 			if (this.bundles.Count == 0 && this.downloadingBundle == "")
 			{
 				return;
@@ -173,9 +188,10 @@ namespace ETModel
 						{
 							using (this.webRequest = ComponentFactory.Create<UnityWebRequestAsync>())
 							{
-								await this.webRequest.DownloadAsync(GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/" + this.downloadingBundle);
+                                Log.Debug("下载文件：" + GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/" + this.downloadingBundle);
+                                await this.webRequest.DownloadAsync(GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/" + this.downloadingBundle);
 								byte[] data = this.webRequest.Request.downloadHandler.data;
-
+                                
 								string path = Path.Combine(PathHelper.AppHotfixResPath, this.downloadingBundle);
 								using (FileStream fs = new FileStream(path, FileMode.Create))
 								{

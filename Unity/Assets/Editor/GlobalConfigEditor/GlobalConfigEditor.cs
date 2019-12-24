@@ -37,6 +37,7 @@ namespace ETEditor
             if (GUILayout.Button("保存"))
             {
                 File.WriteAllText(path, JsonHelper.ToJson(this.globalProto));
+
                 AssetDatabase.Refresh();
             }
         }

@@ -6,9 +6,7 @@ namespace ETHotfix
 	public partial class UnitConfigCategory : ACategory<UnitConfig>
 	{
 	}
-    /// <summary>
-    /// ²¿¼þ¿ØÖÆ
-    /// </summary>
+
 	public class UnitConfig: IConfig
 	{
 		public long Id { get; set; }

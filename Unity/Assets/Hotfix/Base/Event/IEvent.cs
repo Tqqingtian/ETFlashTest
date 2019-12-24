@@ -11,7 +11,9 @@ namespace ETHotfix
 		void Handle(object a, object b);
 		void Handle(object a, object b, object c);
 	}
-
+    /// <summary>
+    /// 事件 
+    /// </summary>
 	public abstract class AEvent : IEvent
 	{
 		public void Handle()

@@ -1,5 +1,8 @@
 ﻿namespace ETModel
 {
+    /// <summary>
+    /// 场景类型
+    /// </summary>
 	public static class SceneType
 	{
 		public const string Share = "Share";
@@ -7,6 +10,12 @@
 		public const string Login = "Login";
 		public const string Lobby = "Lobby";
 		public const string Map = "Map";
+
+        public const string Main = "Main";
+        public const string Load1 = "Load1";
+        public const string Load2 = "Load2";
+
+
 		public const string Launcher = "Launcher";
 		public const string Robot = "Robot";
 		public const string RobotClient = "RobotClient";

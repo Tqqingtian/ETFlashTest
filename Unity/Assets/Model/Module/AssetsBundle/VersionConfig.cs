@@ -16,6 +16,9 @@ namespace ETModel
 		
 		public long TotalSize;
 		
+        /// <summary>
+        /// 文件信息字典
+        /// </summary>
 		[BsonIgnore]
 		public Dictionary<string, FileVersionInfo> FileInfoDict = new Dictionary<string, FileVersionInfo>();
 
@@ -25,6 +28,7 @@ namespace ETModel
 
 			foreach (FileVersionInfo fileVersionInfo in this.FileInfoDict.Values)
 			{
+
 				this.TotalSize += fileVersionInfo.Size;
 			}
 		}

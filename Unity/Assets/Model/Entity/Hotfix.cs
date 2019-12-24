@@ -24,7 +24,7 @@ namespace ETModel
         /// </summary>
 		private Assembly assembly;
 #endif
-
+    
 		private IStaticMethod start;
 		private List<Type> hotfixTypes;
 
@@ -52,9 +52,9 @@ namespace ETModel
         /// </summary>
 		public void LoadHotfixAssembly()
 		{
-			Game.Scene.GetComponent<ResourcesComponent>().LoadBundle($"code.unity3d");
+            //加载热更新（code就是脚本）
+            Game.Scene.GetComponent<ResourcesComponent>().LoadBundle($"code.unity3d");
 			GameObject code = (GameObject)Game.Scene.GetComponent<ResourcesComponent>().GetAsset("code.unity3d", "Code");
-			
 			byte[] assBytes = code.Get<TextAsset>("Hotfix.dll").bytes;
 			byte[] pdbBytes = code.Get<TextAsset>("Hotfix.pdb").bytes;
 			
@@ -64,13 +64,14 @@ namespace ETModel
 
 			this.dllStream = new MemoryStream(assBytes);
 			this.pdbStream = new MemoryStream(pdbBytes);
+
 			this.appDomain.LoadAssembly(this.dllStream, this.pdbStream, new Mono.Cecil.Pdb.PdbReaderProvider());
 
 			this.start = new ILStaticMethod(this.appDomain, "ETHotfix.Init", "Start", 0);
 			
 			this.hotfixTypes = this.appDomain.LoadedTypes.Values.Select(x => x.ReflectionType).ToList();
 #else
-			Log.Debug($"当前使用的是Mono模式");
+			Log.Debug($"当前使用的是Mono模式(本地模式)");
 
 			this.assembly = Assembly.Load(assBytes, pdbBytes);
 
