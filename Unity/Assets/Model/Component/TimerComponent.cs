@@ -140,7 +140,7 @@ namespace ETModel
         /// <summary>
         /// 等待延时时间
         /// </summary>
-        /// <param name="time">时间</param>
+        /// <param name="time">时间(毫秒)</param>
         /// <returns></returns>
 		public ETTask WaitAsync(long time)
 		{

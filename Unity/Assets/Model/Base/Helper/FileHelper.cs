@@ -21,7 +21,7 @@ namespace ETModel
 			}
 		}
 		/// <summary>
-        /// 清理目标文件夹
+        /// 清理目标文件夹(修改)
         /// </summary>
         /// <param name="dir"></param>
 		public static void CleanDirectory(string dir)

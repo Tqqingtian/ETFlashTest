@@ -53,19 +53,19 @@ namespace ETEditor
 			}
 
 			
-			Log.Debug("开始资源打包:"+ fold);
+			Log.Debug("StartBuildAB:"+ fold);
 			BuildPipeline.BuildAssetBundles(fold, buildAssetBundleOptions, buildTarget);
 			//创建版本文件信息
 			GenerateVersionInfo(fold);
-			if (isContainAB)
-			{
-                Log.Debug("清空SA");
+            if (isContainAB)
+            {
+                Log.Debug("CreateSA");
                 FileHelper.CleanDirectory("Assets/StreamingAssets/");
                 Log.Debug("将资源拷贝到SA");
                 FileHelper.CopyDirectory(fold, "Assets/StreamingAssets/");
-			}
+            }
 
-			if (isBuildExe)
+            if (isBuildExe)
 			{
 				AssetDatabase.Refresh();
 				string[] levels = {
@@ -78,13 +78,13 @@ namespace ETEditor
         /// <summary>
         /// 创建版本信息
         /// </summary>
-        /// <param name="dir"></param>
+        /// <param name="dir">目录</param>
 		private static void GenerateVersionInfo(string dir)
         {
             VersionConfig versionProto = new VersionConfig();
             Log.Debug(JsonHelper.ToJson(versionProto));
-
             GenerateVersionProto(dir, versionProto, "");
+
             using (FileStream fileStream = new FileStream($"{dir}/Version.txt", FileMode.Create))
             {
                 byte[] bytes = JsonHelper.ToJson(versionProto).ToByteArray();
@@ -92,6 +92,12 @@ namespace ETEditor
             }
         }
 
+        /// <summary>
+        /// 创建版本proto
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="versionProto"></param>
+        /// <param name="relativePath"></param>
 		private static void GenerateVersionProto(string dir, VersionConfig versionProto, string relativePath)
 		{
 			foreach (string file in Directory.GetFiles(dir))
@@ -116,5 +122,26 @@ namespace ETEditor
 				GenerateVersionProto($"{dir}/{dinfo.Name}", versionProto, rel);
 			}
 		}
-	}
+
+
+        #region 打包原始包
+        /// <summary>
+        /// 原始包
+        /// </summary>
+        public static void BuildOriginal()
+        {
+            
+            if (!Directory.Exists("Assets/StreamingAssets"))
+            {
+                Directory.CreateDirectory("Assets/StreamingAssets");
+            }
+
+            using (FileStream stream = new FileStream("Assets/StreamingAssets/Version.txt", FileMode.Create)) {
+                VersionConfig versionProto = new VersionConfig();
+                byte[] bytes = JsonHelper.ToJson(versionProto).ToByteArray();
+                stream.Write(bytes, 0, bytes.Length);
+            }
+        }
+        #endregion
+    }
 }

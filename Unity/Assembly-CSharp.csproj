@@ -60,7 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\TestScene\Dotnet\TestDotnet.cs" />
+    <Compile Include="Assets\Test.cs" />
     <None Include="Assets\StreamingAssets\Version.txt" />
     <None Include="Assets\Res\Config\GlobalProto.txt" />
     <None Include="Assets\link.xml" />

@@ -68,15 +68,20 @@ namespace ETEditor
 			
 			this.buildAssetBundleOptions = (BuildAssetBundleOptions)EditorGUILayout.EnumFlagsField("BuildAssetBundleOptions(可多选): ", this.buildAssetBundleOptions);
 
-			if (GUILayout.Button("StartBuil"))
+			if (GUILayout.Button("StartBuild"))
 			{
 				if (this.platformType == PlatformType.None)
 				{
-					Log.Error("请选择打包平台!");
+					Log.Error("Not Select Platform!");
 					return;
 				}
 				BuildHelper.Build(this.platformType, this.buildAssetBundleOptions, this.buildOptions, this.isBuildExe, this.isContainAB);
 			}
+
+            if (GUILayout.Button("BuildOriginalVersionToSA"))
+            {
+                BuildHelper.BuildOriginal();
+            }
 		}
 
         #region 设置assetbundle
