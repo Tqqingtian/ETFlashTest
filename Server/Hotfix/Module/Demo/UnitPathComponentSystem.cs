@@ -10,6 +10,7 @@ namespace ETHotfix
     {
         public static async ETTask MoveAsync(this UnitPathComponent self, List<Vector3> path)
         {
+            Log.Debug("测试热更新12315646");
             if (path.Count == 0)
             {
                 return;

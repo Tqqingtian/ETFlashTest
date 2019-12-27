@@ -69,10 +69,9 @@ namespace ETModel
 				using (UnityWebRequestAsync webRequestAsync = ComponentFactory.Create<UnityWebRequestAsync>())
 				{
 					versionUrl = GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/Version.txt";
-                    Log.Debug("下载版本文件："+versionUrl);
                     await webRequestAsync.DownloadAsync(versionUrl);
 					remoteVersionConfig = JsonHelper.FromJson<VersionConfig>(webRequestAsync.Request.downloadHandler.text);
-                    Log.Debug("当前游戏版本号(未对比版本号)："+this.remoteVersionConfig.Version.ToString());
+                    
                 }
 
 			}
@@ -84,15 +83,22 @@ namespace ETModel
 			// 获取streaming目录的Version.txt
 			VersionConfig streamingVersionConfig;
 			string versionPath = Path.Combine(PathHelper.AppResPath4Web, "Version.txt");
-            Log.Debug("本地版本文件："+versionPath);
 			using (UnityWebRequestAsync request = ComponentFactory.Create<UnityWebRequestAsync>())
 			{
 				await request.DownloadAsync(versionPath);
 				streamingVersionConfig = JsonHelper.FromJson<VersionConfig>(request.Request.downloadHandler.text);
 			}
-			
-			//删掉远程不存在的文件
-			DirectoryInfo directoryInfo = new DirectoryInfo(PathHelper.AppHotfixResPath);
+            Log.Debug("本地游戏版本号：" + streamingVersionConfig.Version);
+            Log.Debug("当前游戏版本号：" + remoteVersionConfig.Version);
+            //1.比较两个版本号
+
+            //2.更新客户端
+
+            //3.更新完成关闭
+
+            
+            //删掉远程不存在的文件
+            DirectoryInfo directoryInfo = new DirectoryInfo(PathHelper.AppHotfixResPath);
 			if (directoryInfo.Exists)
 			{
 				FileInfo[] fileInfos = directoryInfo.GetFiles();

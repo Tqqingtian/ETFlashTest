@@ -31,9 +31,7 @@ namespace ETHotfix
             Log.Info("点击 进入游戏 按钮");
 
             Game.EventSystem.Run(EventIdType.InitGameFinish);
-
             MainHelper.EnterMainAsync().Coroutine();
-
         }
 	}
 }

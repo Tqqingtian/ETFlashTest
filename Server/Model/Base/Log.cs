@@ -18,7 +18,7 @@ namespace ETModel
 
 		public static void Info(string message)
 		{
-			globalLog.Info(message);
+            globalLog.Info(message);
 		}
 
 		public static void Debug(string message)

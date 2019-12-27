@@ -8,36 +8,9 @@ namespace ETModel
 	{
 		public override void Awake(UILoadingComponent self)
 		{
-            Log.Debug("[UiLoadingComponentStartSystem.Awake()]");
             self.text = self.GetParent<UI>().GameObject.Get<GameObject>("Text").GetComponent<Text>();
-            //StartAsync(self).Coroutine();
+            self.sdr_Download = self.GetParent<UI>().GameObject.Get<GameObject>("Sder_Download").GetComponent<Slider>();
         }
-
-
-        //public async ETVoid StartAsync(UILoadingComponent self)
-        //{
-        //    Log.Debug("开始更新的UI显示");
-        //    TimerComponent timerComponent = Game.Scene.GetComponent<TimerComponent>();
-        //    long instanceId = self.InstanceId;
-        //    while (true)
-        //    {
-        //        Log.Debug("当前==Id：" + instanceId + "=> 对比 自身==Id：" + self.InstanceId);
-        //        await timerComponent.WaitAsync(10);
-        //        Log.Debug("当前Id：" + instanceId + "=> 对比 自身Id：" + self.InstanceId);
-        //        if (self.InstanceId != instanceId)
-        //        {
-        //            return;
-        //        }
-
-        //        BundleDownloaderComponent bundleDownloaderComponent = Game.Scene.GetComponent<BundleDownloaderComponent>();
-        //        if (bundleDownloaderComponent == null)
-        //        {
-        //            continue;
-        //        }
-        //        Log.Debug("包的大小：" + bundleDownloaderComponent.TotalSize + "包的比例：" + bundleDownloaderComponent.Progress.ToString());
-        //        self.text.text = $"{bundleDownloaderComponent.Progress}%";
-        //    }
-        //}
     }
 
     [ObjectSystem]
@@ -45,7 +18,6 @@ namespace ETModel
     {
         public override void Start(UILoadingComponent self)
         {
-            Log.Debug("[UiLoadingComponentStartSystem.Start()]");
             StartAsync(self).Coroutine();
         }
         /// <summary>
@@ -55,14 +27,12 @@ namespace ETModel
         /// <returns></returns>
         public async ETVoid StartAsync(UILoadingComponent self)
         {
-            Log.Debug("开始更新的UI显示");
             TimerComponent timerComponent = Game.Scene.GetComponent<TimerComponent>();
             long instanceId = self.InstanceId;
 
             while (true)
             {
                 await timerComponent.WaitAsync(10);
-                Log.Debug("当前Id：" + instanceId.ToString() + "本生Id：" + self.InstanceId);
                 if (self.InstanceId != instanceId)
                 {
                     return;
@@ -73,7 +43,7 @@ namespace ETModel
                 {
                     continue;
                 }
-                Log.Debug("包的大小：" + bundleDownloaderComponent.TotalSize + "包的比例：" + bundleDownloaderComponent.Progress.ToString());
+                self.sdr_Download.value = bundleDownloaderComponent.Progress / 100f;
                 self.text.text = $"{bundleDownloaderComponent.Progress}%";
             }
         }
@@ -82,5 +52,6 @@ namespace ETModel
     public class UILoadingComponent : Component
 	{
 		public Text text;
+        public Slider sdr_Download;
 	}
 }

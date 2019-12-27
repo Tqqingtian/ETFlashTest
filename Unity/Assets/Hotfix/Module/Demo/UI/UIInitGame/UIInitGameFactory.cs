@@ -19,7 +19,6 @@ namespace ETHotfix
 				GameObject bundleGameObject = (GameObject)resourcesComponent.GetAsset(UIType.UIInitGame.StringToAB(), UIType.UIInitGame);
 				GameObject gameObject = UnityEngine.Object.Instantiate(bundleGameObject);
 		        UI ui = ComponentFactory.Create<UI, string, GameObject>(UIType.UIInitGame, gameObject, false);
-
 				ui.AddComponent<UIInitGameComponent>();
 				return ui;
 	        }
@@ -30,7 +29,10 @@ namespace ETHotfix
 	        }
 		}
     }
-
+    /// <summary>
+    /// （初始化游戏）
+    /// 创建初始化UI
+    /// </summary>
     [Event(EventIdType.InitGameStart)]
     public class InitGameFinish_CreateInitUI : AEvent
     {

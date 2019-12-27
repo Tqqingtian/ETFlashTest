@@ -9,9 +9,11 @@ namespace ETEditor
 		private const string relativeDirPrefix = "../Release";
 
 		public static string BuildFolder = "../Release/{0}/StreamingAssets/";
-		
-		
-		[MenuItem("Tools/启动web资源服务器")]
+
+        private static int ClientVersion;
+
+
+        [MenuItem("Tools/启动web资源服务器")]
 		public static void OpenFileServer()
 		{
 			ProcessHelper.Run("dotnet", "FileServer.dll", "../FileServer/");
@@ -24,9 +26,11 @@ namespace ETEditor
         /// <param name="buildOptions">打包配置</param>
         /// <param name="isBuildExe">是否打包EXE</param>
         /// <param name="isContainAB">是否包涵AB包</param>
-		public static void Build(PlatformType type, BuildAssetBundleOptions buildAssetBundleOptions, BuildOptions buildOptions, bool isBuildExe, bool isContainAB)
+		public static void Build(PlatformType type, BuildAssetBundleOptions buildAssetBundleOptions, BuildOptions buildOptions, bool isBuildExe, 
+            bool isContainAB, int clientVersion)
 		{
-			BuildTarget buildTarget = BuildTarget.StandaloneWindows;
+            ClientVersion = clientVersion;
+            BuildTarget buildTarget = BuildTarget.StandaloneWindows;
 			string exeName = "ET";
 			switch (type)
 			{
@@ -76,13 +80,32 @@ namespace ETEditor
 			}
 		}
         /// <summary>
+        /// 打包初始包
+        /// </summary>
+        public static void BuildInitial()
+        {
+            string saPath = "Assets/StreamingAssets";
+            if (!Directory.Exists(saPath))
+            {
+                Directory.CreateDirectory(saPath);
+            }
+            VersionConfig versionProto = new VersionConfig();
+            using (FileStream fileStream = new FileStream($"{saPath}/Version.txt", FileMode.Create))
+            {
+                byte[] bytes = JsonHelper.ToJson(versionProto).ToByteArray();
+                fileStream.Write(bytes, 0, bytes.Length);
+            }
+
+        }
+
+        /// <summary>
         /// 创建版本信息
         /// </summary>
         /// <param name="dir">目录</param>
 		private static void GenerateVersionInfo(string dir)
         {
             VersionConfig versionProto = new VersionConfig();
-            Log.Debug(JsonHelper.ToJson(versionProto));
+            versionProto.Version = ClientVersion;
             GenerateVersionProto(dir, versionProto, "");
 
             using (FileStream fileStream = new FileStream($"{dir}/Version.txt", FileMode.Create))

@@ -17,7 +17,7 @@ namespace ETModel
 			{
                 Log.Debug(PathHelper.AppHotfixResPath);
 				SynchronizationContext.SetSynchronizationContext(OneThreadSynchronizationContext.Instance);
-                //DontDestroyOnLoad(gameObject);
+                DontDestroyOnLoad(gameObject);
                 Game.EventSystem.Add(DLLType.Model, typeof(Init).Assembly);
 
 				Game.Scene.AddComponent<TimerComponent>();//计时器
@@ -28,7 +28,6 @@ namespace ETModel
 				Game.Scene.AddComponent<UnitComponent>();//
 				Game.Scene.AddComponent<UIComponent>();//UI
                 // 下载ab包
-                Log.Debug("下载assetebundle开始");
 				await BundleHelper.DownloadBundle();
 				Game.Hotfix.LoadHotfixAssembly();
 				// 加载配置
@@ -37,11 +36,13 @@ namespace ETModel
 				Game.Scene.GetComponent<ResourcesComponent>().UnloadBundle("config.unity3d");
 				Game.Scene.AddComponent<OpcodeTypeComponent>();
 				Game.Scene.AddComponent<MessageDispatcherComponent>();
-
+                   
 				Game.Hotfix.GotoHotfix();
 
 				Game.EventSystem.Run<string>(EventIdType.TestHotfixSubscribMonoEvent, "TestHotfixSubscribMonoEvent");
-			}
+
+                
+            }
 			catch (Exception e)
 			{
 				Log.Error(e);

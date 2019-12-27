@@ -26,8 +26,7 @@ namespace ETHotfix
 			loginBtn = rc.Get<GameObject>("LoginBtn");
 			loginBtn.GetComponent<Button>().onClick.Add(OnLogin);
 			this.account = rc.Get<GameObject>("Account");
-            Log.Info("登录完成");
-            Game.EventSystem.Run(EventIdType.LoginFinish);
+            
         }
         /// <summary>
         /// 登录（不用）

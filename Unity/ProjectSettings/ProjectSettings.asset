@@ -666,7 +666,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     1: NET452;ILRuntime
     4: NET452;ILRuntime
-    7: NET452;ILRuntime1
+    7: NET452;ILRuntime
     13: NET452;ILRuntime
   platformArchitecture:
     iOS: 2
