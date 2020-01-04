@@ -57,6 +57,19 @@ namespace ETEditor
                 this.buildConfig = new BuildConfig();
             }
         }
+        [MenuItem("Tools/打开PD")]
+        public static void OpenPD()
+        {
+            string output = Application.persistentDataPath;
+            if (!Directory.Exists(output))
+            {
+                Directory.CreateDirectory(output);
+            }
+            output = output.Replace("/", "\\");
+            System.Diagnostics.Process.Start("explorer.exe", output);
+
+
+        }
 
         [MenuItem("Tools/BuildTool")]
         public static void ShowWindow()

@@ -70,8 +70,7 @@ namespace ETModel
 				{
 					versionUrl = GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/Version.txt";
                     await webRequestAsync.DownloadAsync(versionUrl);
-					remoteVersionConfig = JsonHelper.FromJson<VersionConfig>(webRequestAsync.Request.downloadHandler.text);
-                    
+					remoteVersionConfig = JsonHelper.FromJson<VersionConfig>(webRequestAsync.Request.downloadHandler.text); 
                 }
 
 			}
@@ -82,14 +81,14 @@ namespace ETModel
 
 			// 获取streaming目录的Version.txt
 			VersionConfig streamingVersionConfig;
-			string versionPath = Path.Combine(PathHelper.AppResPath4Web, "Version.txt");
+			string versionPath = Path.Combine(PathHelper.AppSA, "Version.txt");
 			using (UnityWebRequestAsync request = ComponentFactory.Create<UnityWebRequestAsync>())
 			{
 				await request.DownloadAsync(versionPath);
 				streamingVersionConfig = JsonHelper.FromJson<VersionConfig>(request.Request.downloadHandler.text);
 			}
-            Log.Debug("本地游戏版本号：" + streamingVersionConfig.Version);
-            Log.Debug("当前游戏版本号：" + remoteVersionConfig.Version);
+            Log.Debug("本地SA游戏版本号：" + streamingVersionConfig.Version);
+            Log.Debug("远端游戏版本号：" + remoteVersionConfig.Version);
             //1.比较两个版本号
 
             //2.更新客户端
@@ -194,11 +193,11 @@ namespace ETModel
 						{
 							using (this.webRequest = ComponentFactory.Create<UnityWebRequestAsync>())
 							{
-                                Log.Debug("下载文件：" + GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/" + this.downloadingBundle);
+                                //Log.Debug("下载文件：" + GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/" + this.downloadingBundle);
                                 await this.webRequest.DownloadAsync(GlobalConfigComponent.Instance.GlobalProto.GetUrl() + "StreamingAssets/" + this.downloadingBundle);
 								byte[] data = this.webRequest.Request.downloadHandler.data;
-                                
-								string path = Path.Combine(PathHelper.AppHotfixResPath, this.downloadingBundle);
+                                //下载完成 拷贝到本地PD
+                                string path = Path.Combine(PathHelper.AppHotfixResPath, this.downloadingBundle);
 								using (FileStream fs = new FileStream(path, FileMode.Create))
 								{
 									fs.Write(data, 0, data.Length);

@@ -34,9 +34,9 @@ namespace ETModel
         }
 
         /// <summary>
-        /// 应用程序内部资源路径存放路径(www/webrequest专用)
+        /// 应用程序内部资源路径存放路径 streamingAssetsPath
         /// </summary>
-        public static string AppResPath4Web
+        public static string AppSA
         {
             get
             {

@@ -145,26 +145,5 @@ namespace ETEditor
 				GenerateVersionProto($"{dir}/{dinfo.Name}", versionProto, rel);
 			}
 		}
-
-
-        #region 打包原始包
-        /// <summary>
-        /// 原始包
-        /// </summary>
-        public static void BuildOriginal()
-        {
-            
-            if (!Directory.Exists("Assets/StreamingAssets"))
-            {
-                Directory.CreateDirectory("Assets/StreamingAssets");
-            }
-
-            using (FileStream stream = new FileStream("Assets/StreamingAssets/Version.txt", FileMode.Create)) {
-                VersionConfig versionProto = new VersionConfig();
-                byte[] bytes = JsonHelper.ToJson(versionProto).ToByteArray();
-                stream.Write(bytes, 0, bytes.Length);
-            }
-        }
-        #endregion
     }
 }
