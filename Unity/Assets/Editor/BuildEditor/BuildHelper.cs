@@ -95,7 +95,6 @@ namespace ETEditor
                 byte[] bytes = JsonHelper.ToJson(versionProto).ToByteArray();
                 fileStream.Write(bytes, 0, bytes.Length);
             }
-
         }
 
         /// <summary>

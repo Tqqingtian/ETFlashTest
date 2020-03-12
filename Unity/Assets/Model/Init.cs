@@ -19,7 +19,6 @@ namespace ETModel
 				SynchronizationContext.SetSynchronizationContext(OneThreadSynchronizationContext.Instance);
                 DontDestroyOnLoad(gameObject);
                 Game.EventSystem.Add(DLLType.Model, typeof(Init).Assembly);
-
 				Game.Scene.AddComponent<TimerComponent>();//计时器
 				Game.Scene.AddComponent<GlobalConfigComponent>();
 				Game.Scene.AddComponent<NetOuterComponent>();
@@ -36,12 +35,8 @@ namespace ETModel
 				Game.Scene.GetComponent<ResourcesComponent>().UnloadBundle("config.unity3d");
 				Game.Scene.AddComponent<OpcodeTypeComponent>();
 				Game.Scene.AddComponent<MessageDispatcherComponent>();
-                   
 				Game.Hotfix.GotoHotfix();
-
 				Game.EventSystem.Run<string>(EventIdType.TestHotfixSubscribMonoEvent, "TestHotfixSubscribMonoEvent");
-
-                
             }
 			catch (Exception e)
 			{

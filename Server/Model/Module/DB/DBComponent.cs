@@ -25,15 +25,18 @@ namespace ETModel
 
 		public void Awake()
 		{
+            Log.Debug("初始化 数据库缓存");
 			DBConfig config = StartConfigComponent.Instance.StartConfig.GetComponent<DBConfig>();
 			string connectionString = config.ConnectionString;
 			mongoClient = new MongoClient(connectionString);
+
 			this.database = this.mongoClient.GetDatabase(config.DBName);
 			
 			for (int i = 0; i < taskCount; ++i)
 			{
 				DBTaskQueue taskQueue = ComponentFactory.Create<DBTaskQueue>();
-				this.tasks.Add(taskQueue);
+                Log.Debug(config.DBName+"===="+config.ConnectionString);
+                this.tasks.Add(taskQueue);
 			}
 		}
 		
